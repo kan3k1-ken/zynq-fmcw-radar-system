@@ -82,7 +82,7 @@ range projection, azimuth/elevation heatmaps and 3D Cartesian projection.
 
 ![Host azimuth and elevation heatmaps](docs/assets/host-angle-heatmaps.png)
 
-![Host 3D Cartesian projection](docs/assets/host-3d-position.png)
+![Host 3D Cartesian projection](docs/assets/host-3d-projection.png)
 
 ## Offline quick start
 
