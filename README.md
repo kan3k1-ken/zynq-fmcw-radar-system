@@ -47,6 +47,19 @@ flowchart LR
     HOST --> VIEW["Reports / heatmaps / 3D projection"]
 ```
 
+## Demonstration
+
+The following captures show the implemented PL stream path, UDP report delivery
+and host-side range/angle visualization workflow.
+
+| FPGA data path | AXI-stream timing |
+| --- | --- |
+| ![Vivado PL processing data path](docs/assets/pl-processing-datapath.png) | ![ILA capture of AXI-stream data timing](docs/assets/ila-axis-stream-timing.png) |
+
+| UDP report transport | Host monitoring console |
+| --- | --- |
+| ![Wireshark capture of a UDP report packet](docs/assets/udp-wireshark-capture.png) | ![Host console with range result and azimuth/elevation heatmaps](docs/assets/host-angle-heatmaps.png) |
+
 ## Offline quick start
 
 The offline tools require Python 3.10+ and NumPy. No FPGA board is required for
