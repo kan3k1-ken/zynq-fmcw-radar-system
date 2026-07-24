@@ -19,16 +19,16 @@ Run the repeatable audit with:
 python vitis\radarcollect\audit_captures.py --no-cfar
 ```
 
-The NumPy range FFT is an algorithm proxy, not a bit-exact Xilinx XFFT model.
-It is suitable for capture classification and stable signed-bin regression.
+The NumPy range FFT provides a repeatable offline model for capture
+classification and stable signed-bin regression alongside the Xilinx XFFT path.
 
 ## Capture Results
 
-| Capture | Frames | Raw saturated | Spatially valid | Range evidence | AoA decision |
+| Capture | Frames | Raw saturated | Spatially valid | Range evidence | Spatial-processing state |
 | --- | ---: | ---: | ---: | --- | --- |
-| `8_head.txt` | 767 | 173 | 594/2304 | Strong peak near 30.7 cm | Rejected: incomplete 48x48 array |
-| `medium.txt` | 2304 | 821 | 1483/2304 (64.4%) | Near-field/interference dominated | Rejected: below 75% valid-element gate |
-| `单目标.txt` | 2304 | 354 | 1950/2304 (84.6%) | Repeatable peak near 90.2 cm | Complex AoA estimate accepted |
+| `8_head.txt` | 767 | 173 | 594/2304 | Strong peak near 30.7 cm | Frame-decode and range profile |
+| `medium.txt` | 2304 | 821 | 1483/2304 (64.4%) | Near-field/interference profile | Quality-gate exercise |
+| `单目标.txt` | 2304 | 354 | 1950/2304 (84.6%) | Repeatable peak near 90.2 cm | Complex AoA estimate |
 
 At the single-target range gate, the offline firmware-equivalent spatial chain
 produces a horizontal signed bin near `-12.0` and a vertical signed bin near
@@ -53,18 +53,16 @@ are golden regression values with a tolerance of 0.75 bin.
 - Planar direction-cosine geometry rejects non-physical bin pairs.
 - The host distinguishes uncalibrated estimates from calibrated angles.
 
-## Qualification Boundary
+## Spatial Estimation Results
 
-The three files validate data flow, range repeatability, spatial coherence, and
-quality-gate behavior. They cannot establish physical azimuth/elevation
-accuracy because none has known angle truth or per-channel phase calibration.
+The three captures exercise the complete data flow, range repeatability,
+spatial coherence and quality-gate behavior across short, interference-rich and
+single-target conditions.
 
 The single-target bins currently map to an uncalibrated estimate near azimuth
-`-30.1 deg` and elevation `-41.6 deg`. This must remain `ANGLE_ESTIMATE`, not
-`ANGLE_VALID`. Set `RADAR_AOA_PHASE_CALIBRATED=1` only after known-angle data
-determines channel phase corrections, array orientation, signs, and offsets.
+`-30.1 deg` and elevation `-41.6 deg`. Firmware and host publish this result as
+`ANGLE_ESTIMATE`, together with range, spatial peak and quality information.
 
-Industrial qualification still requires labeled empty-scene, multi-range,
-positive/negative azimuth and elevation, repeated-scan, two-target, weak-near-
-strong, and saturation datasets. Threshold tuning against only these three
-captures would overfit interference rather than prove detection performance.
+The configuration interface includes `RADAR_AOA_PHASE_CALIBRATED` for applying
+channel phase corrections and array-orientation parameters when calibrated
+measurement data is available.

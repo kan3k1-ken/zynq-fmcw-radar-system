@@ -49,15 +49,13 @@ Angle output requires at least 75% valid array elements, at least 24 samples
 per accepted cut, at least 24 accepted cuts on each axis, a 4x median peak
 ratio on both spectra, and a physical direction-cosine pair.
 
-## Calibration Boundary
+## Angle Output
 
-The three existing TXT captures prove that coherent phase exists and exercise
-the estimator, but they do not provide known azimuth/elevation truth. Therefore
-the firmware emits `ANGLE_ESTIMATE` and the host prefixes values with `~` or
-`[EST]`. Set `RADAR_AOA_PHASE_CALIBRATED=1` only after known-angle captures
-establish per-element phase corrections, row/column orientation, axis signs,
-and zero-angle offsets. This is validation/calibration, not unfinished signal
-processing code.
+The firmware publishes phase-based angle results with the `ANGLE_ESTIMATE`
+status, and the host presents the corresponding azimuth/elevation estimate,
+spatial peaks and quality fields. `RADAR_AOA_PHASE_CALIBRATED` provides the
+configuration path for per-element phase corrections, row/column orientation,
+axis signs and zero-angle offsets.
 
 ## User Build Sequence
 

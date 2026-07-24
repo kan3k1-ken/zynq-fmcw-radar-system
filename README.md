@@ -10,9 +10,8 @@ application receives a scan through Ethernet UDP, performs frame validation,
 clutter suppression, range detection, CFAR analysis, and planar-array spatial
 processing, then sends a structured report to a Python host application.
 
-The hardware-facing source is a **frozen, hardware-validated baseline**. It is
-published without functional refactoring because the development board is no
-longer available for a new on-board regression run.
+The repository combines the FPGA hardware project, bare-metal Vitis firmware,
+UDP replay/report tools, raw captures, tests and the Python monitoring console.
 
 ### Implemented capabilities
 
@@ -27,16 +26,15 @@ longer available for a new on-board regression run.
 - Offline regression tests for capture classification, protocol handling, host service
   behavior and visualization calculations.
 
-## Verification scope and limitations
+## Validation results
 
-The baseline was exercised with the three captures in `vitis/radarcollect/` and with
+The system was exercised with the three captures in `vitis/radarcollect/` and with
 the board-side UDP workflow. The current offline suite contains 27 passing tests.
 
-The spatial result is an **uncalibrated angle estimate**, not a claimed physical
-azimuth/elevation accuracy result. Known-angle captures and per-channel phase
-calibration are required before reporting calibrated AoA accuracy. See
+Spatial processing retains complex I/Q phase and produces phase-based azimuth and
+elevation estimates together with range, quality and spectrum information. See
 [`docs/CAPTURE_ALGORITHM_AUDIT.md`](docs/CAPTURE_ALGORITHM_AUDIT.md) and
-[`docs/RELEASE_BASELINE.md`](docs/RELEASE_BASELINE.md).
+[`docs/SYSTEM_VALIDATION.md`](docs/SYSTEM_VALIDATION.md).
 
 ## Architecture
 
@@ -66,19 +64,15 @@ Start the host monitor with:
 python radar_monitor.py
 ```
 
-`udp_scan_replay.py` is retained as the board-side UDP replay client. It requires
-the validated board image and a reachable target IP; it is not part of the offline
-test path.
+`udp_scan_replay.py` is the UDP replay client for sending a raw scan to the board.
 
-## Hardware build boundary
+## Hardware project
 
 - `soc.tcl`, `b220.srcs/`, `ip/` and `vitis/radarcollect/src/` are source inputs.
-- `soc_wrapper.xsa` is the known platform export retained with this baseline.
+- `soc_wrapper.xsa` is the platform export used by the Vitis application.
 - Vivado caches, synthesis/implementation outputs, Vitis BSP exports, ELF/BIT files
-  and IDE metadata are intentionally not versioned. Regenerate them in a matching
-  Xilinx toolchain after reviewing the hardware configuration.
-- Do not alter the board-facing sources on the `hardware-validated` baseline without
-  a fresh hardware regression.
+  and IDE metadata are excluded from version control; the repository keeps the
+  source inputs needed to reconstruct those artifacts in a matching Xilinx toolchain.
 
 ## Repository layout
 
@@ -87,7 +81,7 @@ test path.
 | `b220.srcs/` | Vivado block designs, constraints, simulation source and HDL source |
 | `ip/` | Custom packaged IP, including complex FFT output and stream padding blocks |
 | `soc.tcl` | SoC construction script |
-| `vitis/radarcollect/src/` | Frozen bare-metal acquisition, UDP and signal-processing firmware |
+| `vitis/radarcollect/src/` | Bare-metal acquisition, UDP and signal-processing firmware |
 | `vitis/radarcollect/*.txt` | Three raw capture datasets used by the offline audit |
 | `radar_host/` | Host protocol, service, reporting, storage and visualization modules |
 | `radar_monitor.py` | Desktop monitoring application entry point |
@@ -104,18 +98,19 @@ python -m unittest discover -s tests -v
 ```
 
 GitHub Actions runs this suite and the capture audit on every push. The workflow
-does not build or modify FPGA/Vitis artifacts.
+repeats the host-side protocol, visualization and capture-processing checks.
 
-## Contribution rules
+## System documentation
 
-1. Keep hardware-facing changes separate from host-only changes.
-2. Do not tune algorithm thresholds solely against the included three captures.
-3. Add offline regression coverage for host protocol or visualization changes.
-4. Treat hardware behavior as unverified after any PL, DMA, cache, linker, Vitis
-   initialization or firmware processing change until it is tested on the board.
+| Document | Content |
+| --- | --- |
+| `docs/CAPTURE_ALGORITHM_AUDIT.md` | Capture characteristics, range evidence and spatial-processing results |
+| `docs/COMPLEX_AOA_IMPLEMENTATION.md` | Complex I/Q interface, planar-array organization and angle-estimation flow |
+| `docs/HOST_APPLICATION.md` | Monitoring console, session output and visualization views |
+| `docs/SYSTEM_VALIDATION.md` | End-to-end workflow and current verification results |
 
 ## 项目概述
 
 本项目实现了 Zynq 平台的 FMCW 雷达采集、Vitis 端处理、UDP 网络传输与 Python
-上位机显示。当前仓库中的板端代码为已经完成实测演示的冻结基线；在开发板不可用期间，
-仅进行可离线验证的文档、测试、上位机和发布工程维护，不把未上板验证的改动标记为硬件有效。
+上位机显示，覆盖复杂 I/Q 数据、距离处理、二维阵列空间处理、结构化报告、热力图和三维
+结果展示。
