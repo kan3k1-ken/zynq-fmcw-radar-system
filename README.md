@@ -49,16 +49,40 @@ flowchart LR
 
 ## Demonstration
 
-The following captures show the implemented PL stream path, UDP report delivery
-and host-side range/angle visualization workflow.
+### SoC hardware integration
 
-| FPGA data path | AXI-stream timing |
-| --- | --- |
-| ![Vivado PL processing data path](docs/assets/pl-processing-datapath.png) | ![ILA capture of AXI-stream data timing](docs/assets/ila-axis-stream-timing.png) |
+The SoC block design connects the Zynq processing system, AXI interconnect,
+DMA, DDR path, ILA debug core, control-plane logic and the PL FFT stream.
 
-| UDP report transport | Host monitoring console |
-| --- | --- |
-| ![Wireshark capture of a UDP report packet](docs/assets/udp-wireshark-capture.png) | ![Host console with range result and azimuth/elevation heatmaps](docs/assets/host-angle-heatmaps.png) |
+![Vivado SoC block design](docs/assets/soc-block-design.png)
+
+### PL processing design and timing
+
+The separate design-level diagram shows the I/Q source, AXI stream adapter,
+zero-padding, FFT configuration, XFFT and modified FFT output stages. The ILA
+capture records the corresponding AXI-stream transfer timing and sample data.
+
+![PL processing block design](docs/assets/design-processing-bd.png)
+
+![ILA capture of AXI-stream data timing](docs/assets/ila-axis-stream-timing.png)
+
+### Ethernet UDP data path
+
+Wireshark captures the UDP report delivery from the board network endpoint to
+the host receiver.
+
+![Wireshark capture of a UDP report packet](docs/assets/udp-wireshark-capture.png)
+
+### Host monitoring application
+
+The monitoring console presents the same scan in three complementary views:
+range projection, azimuth/elevation heatmaps and 3D Cartesian projection.
+
+![Host range projection](docs/assets/host-range-view.png)
+
+![Host azimuth and elevation heatmaps](docs/assets/host-angle-heatmaps.png)
+
+![Host 3D Cartesian projection](docs/assets/host-3d-position.png)
 
 ## Offline quick start
 
