@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "dataset_id": "radar-qualification-v1",
+  "sensor": {
+    "board": "B220",
+    "firmware": "protocol-v1-stable",
+    "scan_rows": 48,
+    "scan_columns": 48,
+    "fft_size": 2048
+  },
+  "captures": [
+    {
+      "id": "single-090-center-001",
+      "path": "captures/single_target_090cm.txt",
+      "environment": "lab-a",
+      "label": "single_target",
+      "targets": [
+        {
+          "range_cm": 90.0,
+          "azimuth_deg": 0.0,
+          "elevation_deg": 0.0,
+          "range_tolerance_cm": 3.0,
+          "angle_tolerance_deg": 5.0
+        }
+      ],
+      "tags": ["stationary", "center", "nominal"]
+    },
+    {
+      "id": "empty-lab-a-001",
+      "path": "captures/empty_lab_a_001.txt",
+      "environment": "lab-a",
+      "label": "no_target",
+      "targets": [],
+      "tags": ["background", "false-alarm"]
+    }
+  ]
+}

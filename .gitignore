@@ -1,0 +1,79 @@
+# Python runtime artifacts
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+
+# Local monitor output and personal report artifacts
+/radar_sessions/
+*.doc
+*.docx
+*.pdf
+
+# Vivado generated artifacts and logs
+/.Xil/
+/b220.cache/
+/b220.gen/
+/b220.hw/
+/b220.ip_user_files/
+/b220.runs/
+/b220.sim/
+/NA/
+/b220.xpr
+*.jou
+*.log
+*.str
+*.backup.jou
+*.backup.log
+*.bit
+*.bin
+*.ltx
+*.dcp
+*.xpr.user
+
+# Vitis generated workspace, platform and build outputs
+/vitis/.metadata/
+/vitis/.analytics
+/vitis/RemoteSystemsTempFiles/
+/vitis/soc_wrapper/
+/vitis/radarcollect_system/
+/vitis/xaxidma_example_simple_intr_1/
+/vitis/xaxidma_example_simple_intr_1_system/
+/vitis/radarcollect/Debug/
+/vitis/radarcollect/Release/
+/vitis/radarcollect/_ide/
+/vitis/radarcollect/__pycache__/
+/vitis/radarcollect/*.npz
+/vitis/radarcollect/_*.py
+/vitis/radarcollect/_*.txt
+/vitis/radarcollect/串口输出.txt
+/vitis/radarcollect/README_NETWORK.md
+/vitis/radarcollect/analyze.py
+/vitis/radarcollect/analyze_data.py
+/vitis/radarcollect/deep_analyze.py
+/vitis/radarcollect/radar_2d_fft.py
+/vitis/radarcollect/radar_receiver.py
+/vitis/radarcollect/run_analyze.bat
+/vitis/radarcollect/run_verify_standalone.py
+/vitis/radarcollect/verify_2d_system.py
+/vitis/radarcollect/verify_bg_cancel.py
+/vitis/radarcollect/verify_cfar.py
+/vitis/radarcollect/verify_output_fmt.py
+/vitis/radarcollect/verify_scan_accum.py
+/vitis/radarcollect/verify_window.py
+
+# Personal report generators are intentionally excluded from the public project
+/tools/build_internship_log.py
+/tools/build_internship_report.py
+/tools/refresh_complex_fft_ip.tcl
+
+# Local/reference material not required to reproduce this radar project
+/BKB220_User_Manual/
+
+# Local editor and operating-system files
+.vscode/
+.idea/
+*.swp
+*.tmp
+Thumbs.db
+Desktop.ini
